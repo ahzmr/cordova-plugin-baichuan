@@ -1,0 +1,31 @@
+{
+  "name": "cordova-plugin-baichuan",
+  "version": "0.1.0",
+  "description": "codrova/phonegap wrapper for baichuan sdk",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wenin819/cordova-plugin-baichuan.git"
+  },
+  "cordova": {
+    "id": "cordova.plugin.baichuan",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "keywords": [
+    "taobao",
+    "baichuan",
+    "cordova",
+    "phonegap",
+    "plugin"
+  ],
+  "author": "https://github.com/wenin819",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wenin819/cordova-plugin-baichuan/issues"
+  },
+  "homepage": "https://github.com/wenin819/cordova-plugin-baichuan"
+}

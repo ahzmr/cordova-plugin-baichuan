@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:rim="http://www.blackberry.com/ns/widgets"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-baichuan"
+        version="2.0.0">
+
+    <name>BaiChuanCordova</name>
+    <description>Cordova plugin for Baichuan</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,plugin,taobao,baichuan,taobaoke</keywords>
+    <author>wenin819@gmail.com</author>
+    <repo>https://github.com/wenin819/cordova-plugin-baichuan</repo>
+    <issue>https://github.com/wenin819/cordova-plugin-baichuan/issues</issue>
+
+    <preference name="APPKEY" />
+
+    <!-- js module-->
+    <js-module name="baichuan" src="www/baichuan.js">
+        <clobbers target="Baichuan"/>
+    </js-module>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="BaichuanPlugin">
+                <param name="ios-package" value="BaichuanPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="NSAppTransportSecurity">
+            <dict>
+                <key>NSAllowsArbitraryLoads</key>
+                <true/>
+            </dict>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+            <array>
+                <dict>
+                    <key>CFBundleTypeRole</key>
+                    <string>Editor</string>
+                    <key>CFBundleURLName</key>
+                    <string>baichuan</string>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>tbopen$APPKEY</string>
+                    </array>
+                </dict>
+            </array>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+            <array>
+                <string>tbopen</string>
+                <string>tmall</string>
+            </array>
+        </config-file>
+
+        <header-file src="src/ios/BaichuanPlugin.h" />
+        <source-file src="src/ios/BaichuanPlugin.m" />
+        <header-file src="src/ios/AppDelegate+Baichuan.h" />
+        <source-file src="src/ios/AppDelegate+Baichuan.m" />
+
+        <resource-file src="src/ios/libs/Resources/AlibabaAuthSDK.bundle"/>
+        <resource-file src="src/ios/libs/Resources/ALPLinkPartnerSDK.bundle"/>
+        <resource-file src="src/ios/libs/Resources/NBResource.bundle"/>
+
+        <framework custom="true" src="src/ios/libs/Frameworks/AlibabaAuthExt.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/AlibabaAuthSDK.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/AlibcLinkPartnerSDK.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/AlibcTradeBiz.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/AlibcTradeCommon.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/AlibcTradeSDK.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/OpenMtopExt.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/OpenMtopSDK.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/SecurityGuardSDK.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/SGMain.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/SGSecurityBody.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/TUnionTradeSDK.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/UTDID.framework" />
+        <framework custom="true" src="src/ios/libs/Frameworks/UTMini.framework" />
+
+        <!--与支付宝插件不能共存-->
+        <framework custom="true" src="src/ios/libs/Frameworks/AlipaySDK.framework" />
+
+    </platform>
+
+    <!-- android -->
+    <platform name="android">
+        <source-file
+                src="src/android/BaichuanPlugin.java"
+                target-dir="src/com/zhijianhuo/cordova/plugin"/>
+
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="BaichuanPlugin">
+                <param name="android-package" value="com.zhijianhuo.cordova.plugin.BaichuanPlugin"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+        <framework src="src/android/android-build.gradle" custom="true" type="gradleReference"/>
+    </platform>
+</plugin>
