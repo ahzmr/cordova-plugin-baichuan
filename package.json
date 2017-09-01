@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-baichuan",
-  "version": "0.1.0",
+  "version": "2.1.0",
   "description": "codrova/phonegap wrapper for baichuan sdk",
   "scripts": {
   },

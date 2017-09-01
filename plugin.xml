@@ -3,13 +3,13 @@
         xmlns:rim="http://www.blackberry.com/ns/widgets"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-baichuan"
-        version="2.0.0">
+        version="2.1.0">
 
     <name>BaiChuanCordova</name>
     <description>Cordova plugin for Baichuan</description>
     <license>Apache 2.0</license>
     <keywords>cordova,plugin,taobao,baichuan,taobaoke</keywords>
-    <author>wenin819@gmail.com</author>
+    <author>https://github.com/wenin819</author>
     <repo>https://github.com/wenin819/cordova-plugin-baichuan</repo>
     <issue>https://github.com/wenin819/cordova-plugin-baichuan/issues</issue>
 

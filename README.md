@@ -2,9 +2,9 @@
 
 Cordova plugin for Baichuan SDK (阿里百川Cordova插件)
 
-# Usage
+# 使用说明
 
-## Show page 打开淘宝页面
+## 打开淘宝内购页面
 
 ```js
 Baichuan.showPage(pageArgs, [taokeArgs, showArgs, exArgs], success, error);
@@ -15,7 +15,8 @@ Baichuan.showPage(pageArgs, [taokeArgs, showArgs, exArgs], success, error);
      *      itemId: '',
      *      shopId: '',
      *      allOrder: true/false,
-     *      url: ''
+     *      url: '',
+     *      status: 0-4,    // 所要展示订单的订单状态
      *  }
  * [taokeArgs: {
      *      pid: '',
@@ -45,7 +46,7 @@ Baichuan.showPage(pageArgs, [taokeArgs, showArgs, exArgs], success, error);
  */
 ```
 
-## 全局设置页面
+## 全局默认设置
 
 ```js
 Baichuan.setting(settings, success, error);
@@ -62,7 +63,7 @@ Baichuan.setting(settings, success, error);
  */
 ```
 
-# Prepare 安装预备(必读)
+# 安装前准备工作(必读)
 
   1. [注册您的百川账号](http://baichuan.taobao.com/portal/index.htm)
    
@@ -72,11 +73,17 @@ Baichuan.setting(settings, success, error);
       
   4. 申请开通 初级电商能力
       
-  5. 生成安全图片，放置正确位置
+  5. [生成安全图片，放置正确位置](http://baichuan.taobao.com/docs/doc.htm?spm=a3c0d.7629140.0.0.cO4gRJ&treeId=129&articleId=105645&docType=1)
      
-# Install
+# 安装
 
-```cordova plugin add https://github.com/wenin819/cordova-plugin-baichuan.git```
+```sh
+cordova plugin add cordova-plugin-baichuan --variable APPKEY=<自己的Appkey>
+```
+或
+```sh
+cordova plugin add https://github.com/wenin819/cordova-plugin-baichuan.git --variable APPKEY==<自己的Appkey>
+```
 
 # 注意事项
 ## Android
