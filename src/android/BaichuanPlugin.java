@@ -1,7 +1,5 @@
 package com.zhijianhuo.cordova.plugin;
 
-import android.widget.Toast;
-
 import com.alibaba.baichuan.android.trade.AlibcTrade;
 import com.alibaba.baichuan.android.trade.AlibcTradeSDK;
 import com.alibaba.baichuan.android.trade.callback.AlibcTradeCallback;
@@ -19,10 +17,10 @@ import com.alibaba.baichuan.trade.biz.applink.adapter.AlibcFailModeType;
 import com.alibaba.baichuan.trade.biz.context.AlibcTradeResult;
 import com.alibaba.baichuan.trade.biz.core.taoke.AlibcTaokeParams;
 import com.alibaba.baichuan.trade.common.utils.JSONUtils;
-import com.zhijianhuo.cordova.core.plugin.BasePlugin;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,9 +28,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
-public class BaichuanPlugin extends BasePlugin {
+public class BaichuanPlugin extends CordovaPlugin {
 
     private Boolean sdk_inited = false;
 
@@ -44,14 +43,14 @@ public class BaichuanPlugin extends BasePlugin {
                 public void onSuccess() {
                     sdk_inited = true;
                     System.err.println("AlibcTradeSDK inited ok");
-                    Toast.makeText(cordova.getActivity(), "初始化成功", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(cordova.getActivity(), "初始化成功", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(int code, String message) {
                     sdk_inited = false;
                     System.err.println("AlibcTradeSDK onFailure " + message);
-                    Toast.makeText(cordova.getActivity(), "初始化异常", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(cordova.getActivity(), "初始化异常", Toast.LENGTH_SHORT).show();
                 }
 
             });
@@ -175,7 +174,11 @@ public class BaichuanPlugin extends BasePlugin {
             page = new AlibcAddCartPage(pageArgs.getString("itemId"));
         } else if ("myOrdersPage".equals(type)) {
             //实例化我的订单打开page
-            page = new AlibcMyOrdersPage(0, pageArgs.optBoolean("allOrder") != Boolean.FALSE);
+            int status = 0;
+            if(pageArgs.has("status")) {
+                status = pageArgs.getInt("status");
+            }
+            page = new AlibcMyOrdersPage(status, pageArgs.optBoolean("allOrder") != Boolean.FALSE);
         } else if ("myCartsPage".equals(type)) {
             //实例化我的购物车打开page
             page = new AlibcMyCartsPage();
@@ -216,5 +219,23 @@ public class BaichuanPlugin extends BasePlugin {
 
         AlibcTrade.show(cordova.getActivity(), page, showParam, taokeParams, exParams, callback(callbackContext));
         return true;
+    }
+
+    protected void success(CallbackContext callbackContext, Object result) {
+        if(result instanceof String) {
+            callbackContext.success((String) result);
+        } else if(result instanceof JSONArray) {
+            callbackContext.success((JSONArray) result);
+        } else if(result instanceof JSONObject) {
+            callbackContext.success((JSONObject) result);
+        } else if(result instanceof List) {
+            callbackContext.success(new JSONArray((List) result));
+        } else if(result instanceof Map) {
+            callbackContext.success(new JSONObject((Map) result));
+        } else if(null != result) {
+            callbackContext.error("插件返回结果类型不能识别");
+        } else {
+            callbackContext.success();
+        }
     }
 }

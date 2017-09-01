@@ -21,7 +21,7 @@
 
     // 开发阶段打开日志开关，方便排查错误信息
     //默认调试模式打开日志,release关闭,可以不调用下面的函数
-    [[AlibcTradeSDK sharedInstance] setDebugLogOpen:YES];
+    [[AlibcTradeSDK sharedInstance] setDebugLogOpen:NO];
 }
 
 - (AlibcTradeTaokeParams *)getTaokeParams:(NSDictionary *)taokeArgs {
@@ -51,9 +51,9 @@
     int cnt = 0;
     for (NSString *key in settings) {
         if ([@"forceH5" isEqualToString:key]) {
-            [[AlibcTradeSDK sharedInstance] setIsForceH5:(BOOL) [settings valueForKey:key]];
+            [[AlibcTradeSDK sharedInstance] setIsForceH5: [[settings valueForKey:key] boolValue]];
         } else if ([@"syncForTaoke" isEqualToString:key]) {
-            [[AlibcTradeSDK sharedInstance] setIsSyncForTaoke:(BOOL) [settings valueForKey:key]];
+            [[AlibcTradeSDK sharedInstance] setIsSyncForTaoke: [[settings valueForKey:key] boolValue]];
         } else if ([@"taokeParams" isEqualToString:key]) {
             [[AlibcTradeSDK sharedInstance] setTaokeParams:[self getTaokeParams:[settings valueForKey:key]]];
         } else if ([@"channel" isEqualToString:key]) {
@@ -86,6 +86,7 @@
     NSDictionary *pageArgs = [command argumentAtIndex:0];
     NSDictionary *taokeArgs = [command argumentAtIndex:1 withDefault:nil];
     NSDictionary *showArgs = [command argumentAtIndex:2 withDefault:nil];
+    NSDictionary *exArgs = [command argumentAtIndex:3 withDefault:nil];
 
     id <AlibcTradePage> page = nil;
     NSString *pageType = pageArgs[@"type"];
@@ -103,7 +104,11 @@
         page = [AlibcTradePageFactory shopPage:pageArgs[@"shopId"]];
     } else if ([@"myOrdersPage" isEqualToString:pageType]) {
         //打开我的订单页
-        page = [AlibcTradePageFactory myOrdersPage:0 isAllOrder:!pageArgs[@"allOrder"] ? NO : YES];
+        int status = 0;
+        if(pageArgs[@"status"]) {
+            status = [pageArgs[@"status"] intValue];
+        }
+        page = [AlibcTradePageFactory myOrdersPage:status isAllOrder:!pageArgs[@"allOrder"] ? NO : YES];
     } else if ([@"myCartsPage" isEqualToString:pageType]) {
         //打开我的购物车
         page = [AlibcTradePageFactory myCartsPage];
@@ -126,7 +131,7 @@
             if ([@"backUrl" isEqualToString:key]) {
                 showParam.backUrl = [showArgs valueForKey:key];
             } else if ([@"isNeedPush" isEqualToString:key]) {
-                showParam.isNeedPush = (BOOL) [showArgs valueForKey:key];
+                showParam.isNeedPush = [[showArgs valueForKey:key] boolValue];
             } else if ([@"linkKey" isEqualToString:key]) {
                 showParam.linkKey = [showArgs valueForKey:key];
             } else if ([@"nativeFailMode" isEqualToString:key]) {
@@ -163,7 +168,7 @@
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     };
     [[AlibcTradeSDK sharedInstance].tradeService show:self.viewController page:page showParams:showParam
-                                          taoKeParams:taoKeParams trackParam:nil tradeProcessSuccessCallback:success tradeProcessFailedCallback:^(NSError *error) {
+                                          taoKeParams:taoKeParams trackParam:exArgs tradeProcessSuccessCallback:success tradeProcessFailedCallback:^(NSError *error) {
                 CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             }];

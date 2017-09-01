@@ -12,7 +12,8 @@ module.exports = {
          *      itemId: '',
          *      shopId: '',
          *      allOrder: true/false,
-         *      url: ''
+         *      url: '',
+         *      status: 0-4,    // 所要展示订单的订单状态
          *  }
      * [taokeArgs: {
          *      pid: '',
