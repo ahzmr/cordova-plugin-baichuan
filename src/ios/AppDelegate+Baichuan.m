@@ -17,6 +17,9 @@
                                              openURL:url
                                    sourceApplication:sourceApplication
                                           annotation:annotation]) {
+        // all plugins will get the notification, and their handlers will be called
+        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPluginHandleOpenURLNotification object:url]];
+
         // 处理其他app跳转到自己的app
     }
     return YES;
@@ -28,6 +31,9 @@
     if (![[AlibcTradeSDK sharedInstance] application:app
                                              openURL:url
                                              options:options]) {
+        // all plugins will get the notification, and their handlers will be called
+        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPluginHandleOpenURLNotification object:url]];
+
         //处理其他app跳转到自己的app，如果百川处理过会返回YES
     }
     return YES;
