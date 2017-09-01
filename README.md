@@ -2,9 +2,17 @@
 
 Cordova plugin for Baichuan SDK (阿里百川Cordova插件)
 
-# 使用说明
+## 插件说明
 
-## 打开淘宝内购页面
+支持平台：安卓、IOS
+
+安卓百川版本：3.1.1.202
+
+IOS百川版本：3.1.1.200
+
+## 使用说明
+
+### 打开淘宝内购页面
 
 ```js
 Baichuan.showPage(pageArgs, [taokeArgs, showArgs, exArgs], success, error);
@@ -46,7 +54,7 @@ Baichuan.showPage(pageArgs, [taokeArgs, showArgs, exArgs], success, error);
  */
 ```
 
-## 全局默认设置
+### 全局默认设置
 
 ```js
 Baichuan.setting(settings, success, error);
@@ -63,7 +71,7 @@ Baichuan.setting(settings, success, error);
  */
 ```
 
-# 安装前准备工作(必读)
+## 安装前准备工作(必读)
 
   1. [注册您的百川账号](http://baichuan.taobao.com/portal/index.htm)
    
@@ -75,7 +83,7 @@ Baichuan.setting(settings, success, error);
       
   5. [生成安全图片，放置正确位置](http://baichuan.taobao.com/docs/doc.htm?spm=a3c0d.7629140.0.0.cO4gRJ&treeId=129&articleId=105645&docType=1)
      
-# 安装
+## 安装
 
 ```sh
 cordova plugin add cordova-plugin-baichuan --variable APPKEY=<自己的Appkey>
@@ -85,17 +93,17 @@ cordova plugin add cordova-plugin-baichuan --variable APPKEY=<自己的Appkey>
 cordova plugin add https://github.com/wenin819/cordova-plugin-baichuan.git --variable APPKEY==<自己的Appkey>
 ```
 
-# 注意事项
-## Android
+## 注意事项
+### Android
 
 1. 根据实际情况，`AndroidManifest.xml`可能需要变动，如`application`需要加`tools:replace="android:label,android:allowBackup"`;
 1. 不能直接Debug运行，这样会异常闪退，直接运行是没有这个问题。
 
-## IOS
+### IOS
 
 1. 可能需要手工加`Other Linker Flags`，对应的配置项为：`-lstdc++ -ObjC`；
 
-# 参考链接
+## 参考链接
 1. [更多百川信息](http://baichuan.taobao.com/doc2/detail?spm=a3c0d.7662649.0.0.XTcmuf&treeId=30&articleId=103655&docType=1)
 1. [接入准备工作，安全图片生成](http://baichuan.taobao.com/docs/doc.htm?spm=a3c0d.7629140.0.0.cO4gRJ&treeId=129&articleId=105645&docType=1)
 1. [百川电商 Android SDK3.1接入文档](http://baichuan.taobao.com/docs/doc.htm?spm=a3c0d.7629140.0.0.o0Y63N&treeId=129&articleId=105647&docType=1)
