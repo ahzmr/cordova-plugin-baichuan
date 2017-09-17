@@ -6,9 +6,9 @@
 //  Copyright © 2016年 czp. All rights reserved.
 //
 
-#import "ALPTBJumpParam.h"
+#import "ALPJumpParam.h"
 
-@interface ALPTBURIParam : ALPTBJumpParam
+@interface ALPTBURIParam : ALPJumpParam
 
 /**
  *  要跳转到的H5页面的url

@@ -7,6 +7,7 @@
 
 #import <Cordova/CDVInvokedUrlCommand.h>
 #import "BaichuanPlugin.h"
+#import "AlibabaAuthSDK.framework/Headers/ALBBSDK.h"
 #import <AlibcTradeSDK/AlibcTradeSDK.h>
 
 @implementation BaichuanPlugin
@@ -39,6 +40,49 @@
         taoKeParams.extParams = @{@"key": key};
     }
     return taoKeParams;
+}
+
+- (void)auth:(CDVInvokedUrlCommand *)command {
+    NSString *action = [command argumentAtIndex:0];
+    ALBBSDK *albbsdk = [ALBBSDK sharedInstance];
+    if([@"login" isEqualToString:action]) {
+        [albbsdk auth:[self viewController] successCallback:^(ALBBSession *session) {
+            [self returnSession:command];
+        } failureCallback:^(ALBBSession *session, NSError *error) {
+            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        }];
+    } else if([@"getSession" isEqualToString:action]) {
+        [self returnSession:command];
+    } else if([@"logout" isEqualToString:action]) {
+        [albbsdk logoutWithCallback:^() {
+            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        }];
+    } else {
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid Action"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }
+}
+
+- (void)returnSession:(CDVInvokedUrlCommand *)command {
+    ALBBSession *session = [ALBBSession sharedInstance];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    BOOL login = [session isLogin];
+    dict[@"login"] = @(login);
+    if(login) {
+        ALBBUser *user = [session getUser];
+        dict[@"nick"] = user.nick;
+        dict[@"avatarUrl"] = user.avatarUrl;
+        dict[@"openId"] = user.openId;
+        dict[@"openSid"] = user.openSid;
+        dict[@"topAccessToken"] = user.topAccessToken;
+        dict[@"topAuthCode"] = user.topAuthCode;
+    }
+
+    CDVPluginResult *pluginResult;
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dict];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void)setting:(CDVInvokedUrlCommand *)command {

@@ -16,16 +16,27 @@ typedef NS_ENUM(NSInteger, ALPJumpFailedMode)
     ALPJumpFailedModeOpenNone         = 3 //不处理返回错误信息
 };
 
+@protocol ALPJumpFailedStrategyDelegate <NSObject>
+
+- (void)failToShowH5WithUrl:(NSString *)url;
+
+@end
+
 @interface ALPJumpFailedStrategy : NSObject
 
 /**
- *  跳转失败处理（可选），不设置默认跳转失败，H5页面打开
+ *  跳转失败处理（可选），不设置默认跳转失败，返回错误信息
  */
 @property (nonatomic, assign) ALPJumpFailedMode failedMode;
 
 /**
- *  跳转失败H5页面打开时，自定义webview，如果不设置，将用默认webview打开
+ *  跳转失败H5页面打开时，自定义webview
  */
 @property (nonatomic, strong) UIWebView *webview;
+
+/**
+ *  跳转失败，自定义显示webview的代理
+ */
+@property (nonatomic, weak) id<ALPJumpFailedStrategyDelegate> failToH5Delegate;
 
 @end

@@ -8,16 +8,16 @@ repositories {
 
 dependencies {
 
-    //    fastjson
+    //fastjson（以使用方接入版本为准）
     compile 'com.alibaba:fastjson:1.2.9'
 
-    //支付
+    //支付（以支付宝官网公布的百川版本为准）
     compile 'com.alibaba.alipay:alipaySingle:20160825@jar'
 
     //登陆
-    compile 'com.ali.auth.sdk:alibabauth_core:1.1.4@jar'
-    compile 'com.ali.auth.sdk:alibabauth_ui:1.1.4@aar'
-    compile 'com.ali.auth.sdk:alibabauth_ext:1.1.4@jar'
+    compile 'com.ali.auth.sdk:alibabauth_core:1.4.3@jar'
+    compile 'com.ali.auth.sdk:alibabauth_ui:1.4.3@aar'
+    compile 'com.ali.auth.sdk:alibabauth_ext:1.4.3@jar'
     //【可选】仅供特殊合作伙伴使用
     compile 'com.ali.auth.sdk:alibabauth_accountlink:1.1.4@jar'
 
@@ -37,10 +37,11 @@ dependencies {
     compile 'com.alibaba.mtl:app-monitor-sdk:2.5.1.3_for_bc_proguard@jar'
 
     //联盟SDK
-    compile 'com.alimama.tunion.sdk:tuniontradesdk:0.3.0'
+    compile 'com.alimama.tunion.sdk:tuniontradesdk:0.3.2@aar'
 
     //电商SDK
-    compile 'com.alibaba.sdk.android:alibc_trade_common:3.1.1.202'
-    compile 'com.alibaba.sdk.android:alibc_trade_biz:3.1.1.202'
-    compile 'com.alibaba.sdk.android:alibc_trade_sdk:3.1.1.202'
+    compile 'com.alibaba.sdk.android:alibc_trade_common:3.1.1.204'
+    compile 'com.alibaba.sdk.android:alibc_trade_biz:3.1.1.204'
+    compile 'com.alibaba.sdk.android:alibc_trade_sdk:3.1.1.204'
+
 }

@@ -10,6 +10,7 @@
 @interface BaichuanPlugin : CDVPlugin
 
 - (void)pluginInitialize;
+- (void)auth:(CDVInvokedUrlCommand *)command;
 - (void)setting:(CDVInvokedUrlCommand *)command;
 - (void)showPage:(CDVInvokedUrlCommand*)command;
 

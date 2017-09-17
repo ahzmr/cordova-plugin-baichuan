@@ -6,11 +6,21 @@ Cordova plugin for Baichuan SDK (阿里百川Cordova插件)
 
 支持平台：安卓、IOS
 
-安卓百川版本：3.1.1.202
+安卓百川版本：3.1.1.204 --2017-9-11
 
-IOS百川版本：3.1.1.200
+IOS百川版本：3.1.1.205 --2017-09-11
 
 ## 使用说明
+
+### 淘宝授权与退出
+
+```js
+Baichuan.auth(action, success, error);
+    
+/**
+ * action: login/getSession/logout
+ */
+```
 
 ### 打开淘宝内购页面
 

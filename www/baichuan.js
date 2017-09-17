@@ -67,5 +67,13 @@ module.exports = {
         success = success || defaultSuccessHandler;
         error = error || defaultErrorHandler;
         cordova.exec(success, error, 'BaichuanPlugin', 'setting', [settings]);
+    },
+    /**
+     * action: login/getSession/logout
+     */
+    auth: function(action, success, error) {
+        success = success || defaultSuccessHandler;
+        error = error || defaultErrorHandler;
+        cordova.exec(success, error, 'BaichuanPlugin', 'auth', [action]);
     }
 };

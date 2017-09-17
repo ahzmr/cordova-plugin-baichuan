@@ -6,9 +6,9 @@
 //  Copyright © 2016年 czp. All rights reserved.
 //
 
-#import "ALPTBJumpParam.h"
+#import "ALPJumpParam.h"
 
-@interface ALPTBShopParam : ALPTBJumpParam
+@interface ALPTBShopParam : ALPJumpParam
 
 /**
  *  shopId,要跳转到的店铺
@@ -19,7 +19,7 @@
 /**
  *  初始化,shopId必传
  *
- *  @param shopId
+ *  @param shopId shopId
  */
 -(instancetype)initWithShopId:(NSString *)shopId;
 

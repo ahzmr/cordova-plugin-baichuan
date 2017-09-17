@@ -6,9 +6,9 @@
 //  Copyright © 2016年 czp. All rights reserved.
 //
 
-#import "ALPTBJumpParam.h"
+#import "ALPJumpParam.h"
 
-@interface ALPTBDetailParam : ALPTBJumpParam
+@interface ALPTBDetailParam : ALPJumpParam
 
 /**
  *  itemId,要跳转到的商品
@@ -18,7 +18,7 @@
 /**
  *  初始化,itemId(必传)
  *
- *  @param itemId
+ *  @param itemId itemId
  */
 -(instancetype)initWithItemId:(NSString *)itemId;
 

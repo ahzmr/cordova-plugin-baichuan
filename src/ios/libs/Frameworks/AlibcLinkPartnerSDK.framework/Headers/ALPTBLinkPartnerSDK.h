@@ -10,11 +10,10 @@
 #import <UIKit/UIKit.h>
 #import "ALPTBShopParam.h"
 #import "ALPTBDetailParam.h"
-#import "ALPTBAuthParam.h"
 #import "ALPTBURIParam.h"
 #import "ALPJumpFailedStrategy.h"
 
-#define ALPSDKVersion @"1.1.0.9"
+#define ALPSDKVersion @"1.1.1.2"
 
 typedef NS_ENUM(NSInteger, ALPOpenType) {
     ALPOpenTypeNative,          //跳转native打开
@@ -28,6 +27,8 @@ typedef NS_ENUM(NSInteger, ALPConfigEnv) {
     ALPConfigEnvDaily,       //测试环境
     ALPConfigEnvPreRelease,  //预发环境
 };
+
+typedef void(^ALPJumpBackBlock)(NSURL *_Nullable url, NSError *_Nullable error);
 
 @interface ALPTBLinkPartnerSDK : NSObject
 
@@ -60,24 +61,26 @@ typedef NS_ENUM(NSInteger, ALPConfigEnv) {
 + (void)setOpenType:(ALPOpenType)type;
 
 /**
- *  设置业务追踪id，仅供二方使用，其他接入无需关心
+ *  是否支持deepLink，即打开xxx APP某个页面时，APP没有安装
+ *  跳转AppStore下载APP，打开APP时，自动进入那个页面
+ *  只在设置跳转失败去AppStore情况才支持，默认是支持DeepLink
  *
- *  @param ttid
+ *  @param isSupport 是否支持
  */
-+ (void)setTTID:(nonnull NSString *)ttid;
++ (void)setSupportDeepLink:(BOOL)isSupport;
 
 /**
- *  授权登录时必传
+ *  设置业务追踪id，仅供二方使用，其他接入无需关心
  *
- *  @param authSecret 百川平台appSecret
+ *  @param ttid ttid
  */
-+ (void)setAuthSecret:(nonnull NSString *)authSecret;
++ (void)setTTID:(nonnull NSString *)ttid;
 
 /**
  *  跳转到店铺页
  *
  *  @param param    店铺的配置参数
- *  @param strategy 跳转失败时处理策略，不传，默认h5页面打开
+ *  @param strategy 跳转失败时处理策略，不传，返回错误信息
  *
  *  @return 错误信息
  */
@@ -88,7 +91,7 @@ typedef NS_ENUM(NSInteger, ALPConfigEnv) {
  *  跳转到商品详情页
  *
  *  @param param    商品详情的配置参数
- *  @param strategy 跳转失败时处理策略，不传，默认h5页面打开
+ *  @param strategy 跳转失败时处理策略，不传，返回错误信息
  *
  *  @return 错误信息
  */
@@ -96,10 +99,11 @@ typedef NS_ENUM(NSInteger, ALPConfigEnv) {
                    failedStrategy:(nullable ALPJumpFailedStrategy *)strategy;
 
 /**
- *  根据URI跳转，以webView的形式打开
+ *  根据URI跳转到手淘，以webView的形式打开；
+ *  跳转到接入AlibcFlowCustoms SDK的APP，相当于通用跳转（类似openURL：）
  *
  *  @param param    URI的配置参数
- *  @param strategy 跳转失败时处理策略，不传，默认h5页面打开
+ *  @param strategy 跳转失败时处理策略，不传，返回错误信息
  *
  *  @return 错误信息
  */
@@ -107,14 +111,18 @@ typedef NS_ENUM(NSInteger, ALPConfigEnv) {
                 failedStrategy:(nullable ALPJumpFailedStrategy *)strategy;
 
 /**
- *  授权
+ *  通用跳转，param参数中的routeRule必传，匹配接入AlibcFlowCustoms SDK 中注册的插件执行，回跳时触发回调
  *
- *  @param param 授权参数，只支持淘宝授权登录，linkkey为kTaobaoLinkKey
- *               天猫不支持授权登录
+ *  @param param    URI的配置参数
+ *  @param strategy 跳转失败时处理策略，不传，返回错误信息
+ *  @param callback 触发插件执行，回跳时的回调。
+ *  跳转去目标APP，切换回来，认为用户取消操作触发回调，返回错误信息
  *
  *  @return 错误信息
  */
-+ (nullable ALPError *)doAuth:(nonnull ALPTBAuthParam *)param;
++ (nullable ALPError *)jumpURI:(nonnull ALPTBURIParam *)param
+                failedStrategy:(nullable ALPJumpFailedStrategy *)strategy
+              jumpBackCallback:(nullable ALPJumpBackBlock)callback;
 
 /**
  *  跳转失败，是否支持默认打开手淘
@@ -134,13 +142,12 @@ typedef NS_ENUM(NSInteger, ALPConfigEnv) {
 + (BOOL)handleOpenURL:(nonnull NSURL *)url sourceApplication:(nullable NSString *)sourceApplication;
 
 /**
- *  检查是否能打开指定APP
+ *  检查是否能打开指定app，传入是linkKey，比如：@"taobao"，指手淘
  *
- *  @param linkKey 根据对应对应常量字符串来设定（kTaobaoLinkKey,kTmallLinkKey)
+ *  @param linkkey linkkey
  *
  *  @return 是否能打开APP
  */
-+ (BOOL)canOpenApp:(nullable NSString*)linkKey;
-
++ (BOOL)canOpenApp:(nonnull NSString *)linkkey;
 
 @end

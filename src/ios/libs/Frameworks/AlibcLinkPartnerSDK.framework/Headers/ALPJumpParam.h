@@ -10,8 +10,8 @@
 #import "ALPError.h"
 
 //对应的linkKey
-FOUNDATION_EXTERN NSString *const kTaobaoLinkKey;       //打开淘宝
-FOUNDATION_EXTERN NSString *const kTmallLinkKey;        //打开天猫
+FOUNDATION_EXTERN NSString *const ALPTaobaoLinkKey;       //打开淘宝
+FOUNDATION_EXTERN NSString *const ALPTmallLinkKey;        //打开天猫
 
 @interface ALPJumpParam : NSObject
 
@@ -26,22 +26,35 @@ FOUNDATION_EXTERN NSString *const kTmallLinkKey;        //打开天猫
 @property (nonatomic, copy) NSString *backURL;
 
 /**
+ *  跳出模块的业务标识
+ */
+@property (nonatomic, copy) NSString *visa;
+
+/**
+ *  跳转是未安装跳转APP，对应的降级地址
+ */
+@property (nonatomic, copy) NSString *degradeToH5Url;
+
+/**
+ *  模块，h5，detail，shop，auth;不需要改动
+ */
+@property (nonatomic, copy) NSString *module;
+
+/**
  *  跳转时当前页面，用于坑位统计
  */
 @property (nonatomic, copy) NSString *currentViewName;
+
+/**
+ *  AlibcFlowCustoms SDK 插件匹配规则，触发对应插件执行
+ */
+@property (nonatomic, copy) NSString *routeRule;
 
 /**
  *  额外参数(可选)
  */
 @property (nonatomic, strong) NSMutableDictionary *extraParam;
 
-
-- (ALPError *)isLegalParam;
-
-/**
- *  跳转是未安装跳转APP，对应的降级地址
- */
-- (NSString *)degradeToH5Url;
 
 
 

@@ -1,5 +1,6 @@
 package com.zhijianhuo.cordova.plugin;
 
+import com.ali.auth.third.core.model.Session;
 import com.alibaba.baichuan.android.trade.AlibcTrade;
 import com.alibaba.baichuan.android.trade.AlibcTradeSDK;
 import com.alibaba.baichuan.android.trade.callback.AlibcTradeCallback;
@@ -16,12 +17,15 @@ import com.alibaba.baichuan.android.trade.page.AlibcShopPage;
 import com.alibaba.baichuan.trade.biz.applink.adapter.AlibcFailModeType;
 import com.alibaba.baichuan.trade.biz.context.AlibcTradeResult;
 import com.alibaba.baichuan.trade.biz.core.taoke.AlibcTaokeParams;
+import com.alibaba.baichuan.trade.biz.login.AlibcLogin;
+import com.alibaba.baichuan.trade.biz.login.AlibcLoginCallback;
 import com.alibaba.baichuan.trade.common.utils.JSONUtils;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 
 public class BaichuanPlugin extends CordovaPlugin {
+
+    private static final String TAG = "BaichuanPlugin";
 
     private Boolean sdk_inited = false;
 
@@ -108,6 +114,8 @@ public class BaichuanPlugin extends CordovaPlugin {
                 return showPage(args.getJSONObject(0), args.optJSONObject(1), args.optJSONObject(2), args.optJSONObject(3), callbackContext);
             } else if ("setting".equals(action)) {
                 return setting(args.getJSONObject(0), callbackContext);
+            } else if ("auth".equals(action)) {
+                return auth(args.getString(0), callbackContext);
             }
             callbackContext.error("Invalid Action");
             return false;
@@ -116,6 +124,67 @@ public class BaichuanPlugin extends CordovaPlugin {
             callbackContext.error(e.getMessage());
             return false;
         }
+    }
+
+    private boolean auth(String action, final CallbackContext callbackContext) throws JSONException {
+        final AlibcLogin alibcLogin = AlibcLogin.getInstance();
+        switch (action) {
+            case "login":
+                alibcLogin.showLogin(new AlibcLoginCallback() {
+                    @Override
+                    public void onSuccess(int i) {
+                        returnSession(callbackContext);
+                    }
+                    @Override
+                    public void onFailure(int i, String s) {
+                        callbackContext.error(s);
+                    }
+                });
+                break;
+            case "getSession":
+                returnSession(callbackContext);
+                break;
+            case "logout":
+                alibcLogin.logout(new AlibcLoginCallback() {
+                    @Override
+                    public void onSuccess(int i) {
+                        callbackContext.success();
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+                        callbackContext.error(s);
+                    }
+                });
+                break;
+            default:
+                callbackContext.error("Invalid Action");
+                return false;
+        }
+        return true;
+    }
+
+    private void returnSession(CallbackContext callbackContext) {
+        final AlibcLogin alibcLogin = AlibcLogin.getInstance();
+        JSONObject jsonObject = new JSONObject();
+        boolean login = alibcLogin.isLogin();
+        try {
+            jsonObject.put("login", login);
+            if(login) {
+                Session session = alibcLogin.getSession();
+                jsonObject.put("userid", session.userid);
+                jsonObject.put("nick", session.nick);
+                jsonObject.put("avatarUrl", session.avatarUrl);
+                jsonObject.put("openId", session.openId);
+                jsonObject.put("openSid", session.openSid);
+                jsonObject.put("topAccessToken", session.topAccessToken);
+                jsonObject.put("topAuthCode", session.topAuthCode);
+                jsonObject.put("topExpireTime", session.topExpireTime);
+            }
+        } catch (JSONException e) {
+            callbackContext.error("转化数据失败，失败原因为：" + e.getMessage());
+        }
+        success(callbackContext, jsonObject);
     }
 
     private boolean setting(JSONObject settings, CallbackContext callbackContext) throws JSONException {
